@@ -10,7 +10,6 @@ public class NioTest {
         NioServer.start();
         Thread.sleep(100);
         NioClient.start();
-        System.out.println(Thread.activeCount());
         while (NioClient.sendMsg(new Scanner(System.in).nextLine()));
     }
 }

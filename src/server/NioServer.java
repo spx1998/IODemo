@@ -9,9 +9,9 @@ public class NioServer {
     public static void start(){
         start(PORT);
     }
-    public static void start(int port){
+    public static synchronized void start(int port){
         if(nioHandle !=null){
-            nioHandle =null;
+            nioHandle.stop();
         }
         nioHandle = new NioHandle(port);
         new Thread(nioHandle,"Server").start();

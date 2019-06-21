@@ -53,7 +53,6 @@ public class NioHandle implements Runnable{
                                 key.channel().close();
                             }
                         }
-
                     }
                 }
             } catch (IOException e) {
@@ -79,8 +78,6 @@ public class NioHandle implements Runnable{
                     byteBuffer.get(bytes);
                     String expression = new String(bytes, StandardCharsets.UTF_8);
                     System.out.println("expression:"+expression);
-//                    System.out.println(Thread.activeCount());
-//                    Thread.sleep(10000);
                     String result =expression+"!!";
                     doWrite(sc,result);
                 }else if(readBytes<0){

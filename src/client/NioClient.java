@@ -7,7 +7,7 @@ public class NioClient {
     public static void start() {
         start(PORT);
     }
-    public static void start(int port){
+    public static synchronized void start(int port){
         if(nioHandle != null){
             nioHandle.stop();
         }

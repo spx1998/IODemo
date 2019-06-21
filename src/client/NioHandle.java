@@ -27,9 +27,7 @@ public class NioHandle implements Runnable{
         try{
 
             selector = Selector.open();
-
             socketChannel = SocketChannel.open(new InetSocketAddress(ip, port));
-
             socketChannel.configureBlocking(false);
             started = true;
         } catch (IOException e) {
@@ -43,7 +41,7 @@ public class NioHandle implements Runnable{
     @Override
     public void run() {
         try{
-            doConnect();
+            socketChannel.register(selector, SelectionKey.OP_CONNECT);
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(1);
@@ -51,10 +49,7 @@ public class NioHandle implements Runnable{
 
         while (started){
             try {
-
                 selector.select(1000);
-
-
                 Set<SelectionKey> keys = selector.selectedKeys();
                 Iterator<SelectionKey> it = keys.iterator();
                 SelectionKey key = null;
@@ -92,13 +87,9 @@ public class NioHandle implements Runnable{
                 if(sc.finishConnect());
                 else System.exit(1);
             }
-
             if(key.isReadable()){
-
                 ByteBuffer buffer = ByteBuffer.allocate(1024);
-
                 int readBytes = sc.read(buffer);
-
                 if(readBytes>0){
                     buffer.flip();
                     byte[] bytes = new byte[buffer.remaining()];
@@ -120,12 +111,8 @@ public class NioHandle implements Runnable{
         writeBuffer.flip();
         socketChannel.write(writeBuffer);
     }
-    private void doConnect() throws IOException {
-//        if(!socketChannel.connect(new InetSocketAddress(ip,port)))
-//            socketChannel.register(selector, SelectionKey.OP_CONNECT);
-        socketChannel.register(selector, SelectionKey.OP_CONNECT);
 
-    }
+
     public void sendMsg(String msg) throws IOException {
         socketChannel.register(selector,SelectionKey.OP_READ);
         doWrite(socketChannel,msg);
